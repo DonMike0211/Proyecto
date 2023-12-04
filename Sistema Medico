@@ -1,0 +1,46 @@
+class SistemaExpertoMedico:
+    def __init__(self):
+        self.base_de_conocimientos = {
+            'gripe': {'fiebre': True, 'dolor_garganta': True, 'fatiga': True},
+            'amigdalitis': {'fiebre': True, 'dolor_garganta': True, 'fatiga': False},
+            'resfriado': {'fiebre': False, 'dolor_garganta': True, 'fatiga': True},
+            # Agrega más enfermedades y síntomas según sea necesario
+        }
+
+    def diagnosticar_enfermedad(self, sintomas):
+        enfermedades_posibles = []
+
+        for enfermedad, reglas in self.base_de_conocimientos.items():
+            coincide = all(reglas[sintoma] == sintomas[sintoma] for sintoma in sintomas)
+            if coincide:
+                enfermedades_posibles.append(enfermedad)
+
+        return enfermedades_posibles
+
+
+def obtener_sintomas_del_paciente():
+    sintomas = {}
+    print("Por favor, responde 'sí' o 'no' a las siguientes preguntas:")
+    for sintoma in SistemaExpertoMedico().base_de_conocimientos['gripe']:
+        respuesta = input(f"¿Tienes {sintoma.replace('_', ' ')}? ").lower()
+        sintomas[sintoma] = respuesta == 'sí'
+    return sintomas
+
+
+# Ejemplo de uso con menú
+if __name__ == "__main__":
+    sistema_experto = SistemaExpertoMedico()
+
+    # Obtener síntomas del paciente
+    sintomas_paciente = obtener_sintomas_del_paciente()
+
+    # Diagnóstico
+    enfermedades_diagnosticadas = sistema_experto.diagnosticar_enfermedad(sintomas_paciente)
+
+    # Resultados
+    if enfermedades_diagnosticadas:
+        print("\nEl paciente podría tener una de las siguientes enfermedades:")
+        for enfermedad in enfermedades_diagnosticadas:
+            print(f"- {enfermedad}")
+    else:
+        print("\nNo se pudo determinar la enfermedad con los síntomas proporcionados.")
